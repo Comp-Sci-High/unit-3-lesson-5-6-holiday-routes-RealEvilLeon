@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Food Generator — Eid‑Ul‑Adha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      .generator {display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+      .result{padding:14px 18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);color:var(--accent-1);font-weight:700;font-size:1.2rem;min-width:220px}
+      .pop{transform:scale(1.04);transition:transform .18s ease}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-row">
+        <a class="brand" href="/">Eid‑Ul‑Adha</a>
+        <nav class="main-nav">
+          <a href="/">Home</a>
+          <a href="/about.html">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-text">
+            <h1>Eid Food Generator</h1>
+            <p class="lead">Not sure what to cook for the celebration? Press the button to get a festive suggestion.</p>
+            <div class="generator">
+              <div id="foodOutput" class="result" aria-live="polite">Press the button to generate</div>
+              <div>
+                <button id="genBtn" class="btn btn-primary">Generate a Dish</button>
+                <button id="shareBtn" class="btn btn-ghost" style="margin-left:8px">Share</button>
+              </div>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <svg viewBox="0 0 200 200" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g2" x1="0" x2="1">
+                  <stop offset="0" stop-color="#FFD27A" />
+                  <stop offset="1" stop-color="#FF8FA3" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="90" fill="url(#g2)" opacity="0.95"/>
+              <g fill="#fff" opacity="0.9">
+                <rect x="60" y="70" width="80" height="50" rx="8" />
+                <path d="M85 60c6-8 24-8 30 0v6H85z" fill="#fff"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="container section">
+        <h2>Why use it?</h2>
+        <p class="muted">Quick, fun suggestions to spark ideas for family feasts and community gatherings.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <strong>Eid‑Ul‑Adha</strong>
+          <p class="muted">Wishes of peace, compassion, and unity.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/">Home</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function(){
+        const foods = [
+          'Lamb Biryani', 'Roast Lamb with Herbs', 'Grilled Kebabs', 'Mansaf', 'Pilaf with Nuts', 'Sheer Khurma', 'Stuffed Vegetables', 'Spiced Goat Roast', 'Baklava & Sweets'
+        ];
+        const btn = document.getElementById('genBtn');
+        const output = document.getElementById('foodOutput');
+        const shareBtn = document.getElementById('shareBtn');
+
+        function pick(){
+          const i = Math.floor(Math.random()*foods.length);
+          return foods[i];
+        }
+
+        btn.addEventListener('click', ()=>{
+          const choice = pick();
+          output.textContent = choice;
+          output.classList.add('pop');
+          setTimeout(()=> output.classList.remove('pop'),400);
+        });
+
+        shareBtn.addEventListener('click', async ()=>{
+          const text = 'Eid dish idea: ' + (output.textContent || 'Try generating one!');
+          if(navigator.share){
+            try{ await navigator.share({text}); }catch(e){ /* ignore */ }
+          } else {
+            navigator.clipboard?.writeText(text).then(()=>{
+              const prev = shareBtn.textContent;
+              shareBtn.textContent = 'Copied';
+              setTimeout(()=> shareBtn.textContent = prev,900);
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
